@@ -5,7 +5,6 @@ from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
 
-
 class MyHandler(FileSystemEventHandler):
 
     def on_modified(self, event):
@@ -21,15 +20,24 @@ if __name__ == "__main__":
         while True:
 
             source = os.listdir('/Users/Honzor/Downloads/')
-            destination = '/Users/Honzor/Desktop/AUDIO/MIXES & PLAYLISTS/'
+            mixesDestination = '/Users/Honzor/Desktop/AUDIO/MIXES & PLAYLISTS/'
+            memesDestination = '/Users/Honzor/Desktop/memes'
+            desktop = '/Users/Honzor/Desktop/'
             min_size = 20000000
 
             for files in source:
+                downloads = os.path.join('/Users/Honzor/Downloads/', files)
+
                 if files.endswith(".mp3"):
-                    if os.path.getsize(os.path.join('/Users/Honzor/Downloads/', files)) > min_size:
-                        shutil.move(os.path.join('/Users/Honzor/Downloads/', files), os.path.join(destination, files))
+                    if os.path.getsize(downloads) > min_size:
+                        shutil.move(downloads, os.path.join(mixesDestination, files))
                     else:
                         print(files + ' - This is under 20mb and is not a music mix.')
+
+                elif files.endswith(".gif"):
+                    shutil.move(downloads, os.path.join(memesDestination, files))
+                    print(files + '- This meme has been moved.')
+
             time.sleep(10)
     except KeyboardInterrupt:
         observer.stop()
